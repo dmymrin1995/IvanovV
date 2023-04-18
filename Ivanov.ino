@@ -9,7 +9,7 @@ Servo myservo;
 Servo myservo1; 
 
 void setup() {
-  myservo.attach(9);
+  myservo.attach(8);
   myservo1.attach(11);
 
   Serial.begin(9600);
@@ -20,6 +20,7 @@ void setup() {
   switchCharacteristic.setValue(0);
   blePeripheral.begin();
   Serial.println("BLE LED Peripheral");
+  myservo.write(90);
 
 }
 
@@ -30,17 +31,26 @@ void loop() {
     Serial.println(central.address());
     while (central.connected()) {
       if (switchCharacteristic.written()) {
+          myservo.write(90);
         if (switchCharacteristic.value() == 1) {   
-          myservo.write(90);                  
+          myservo.write(0);
+          delay(50);
+          myservo.write(90); 
         } 
         else if (switchCharacteristic.value() == 2) {                              
-          myservo.write(0);    
+          myservo.write(180);
+          delay(50);
+          myservo.write(90);  
         }
         else if (switchCharacteristic.value() == 3) {   
-          myservo1.write(90);                  
+          myservo.write(180);
+          delay(50);
+          myservo.write(90);               
         } 
-        else if (switchCharacteristic.value() == 4) {                              
-          myservo1.write(0);    
+        else if (switchCharacteristic.value() == 4) {   
+          myservo1.write(0);
+          delay(50);
+          myservo1.write(90);               
         }
       }
     }
